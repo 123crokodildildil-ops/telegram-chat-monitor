@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Данные из .env
+# Данные из переменных окружения
 API_ID = int(os.getenv('TELEGRAM_API_ID'))
 API_HASH = os.getenv('TELEGRAM_API_HASH')
 PHONE = os.getenv('TELEGRAM_PHONE')
@@ -51,97 +51,3 @@ async def check_dialogs():
 
 if __name__ == '__main__':
     asyncio.run(check_dialogs())
-```
-
-Нажмите **Commit changes**
-
----
-
-#### **Файл 3: `Procfile`**
-
-Имя файла: `Procfile` (без расширения!)
-
-Содержимое:
-```
-worker: while true; do python monitor.py; sleep 86400; done
-```
-
-Это запустит скрипт раз в сутки (86400 секунд = 24 часа)
-
-Нажмите **Commit changes**
-
----
-
-#### **Файл 4: `runtime.txt`**
-
-Имя файла: `runtime.txt`
-
-Содержимое:
-```
-python-3.11.0
-```
-
-Нажмите **Commit changes**
-
----
-
-**✅ Готово:** В репозитории 4 файла
-
----
-
-### Шаг 3: Разворачиваем на Railway
-
-1. Перейдите на https://railway.app
-2. **New Project** → **Deploy from GitHub repo**
-3. Выберите репозиторий `telegram-chat-monitor`
-4. Railway начнёт деплой (подождите 2-3 минуты)
-
-**⚠️ Деплой упадёт с ошибкой** — это нормально, нужно добавить переменные окружения.
-
----
-
-### Шаг 4: Добавляем переменные окружения
-
-1. В Railway нажмите на развёрнутый сервис
-2. Перейдите в **Variables**
-3. Нажмите **Add Variable** и добавьте:
-```
-TELEGRAM_API_ID = [ваш api_id из my.telegram.org]
-TELEGRAM_API_HASH = [ваш api_hash]
-TELEGRAM_PHONE = [номер телефона аккаунта рассылок в формате +79123456789]
-N8N_WEBHOOK_URL = [пока оставьте пустым, заполним позже]
-```
-
-4. После добавления всех переменных нажмите **Deploy** (или он перезапустится сам)
-
----
-
-### Шаг 5: Авторизация Telegram
-
-1. В Railway перейдите в **Deployments**
-2. Кликните на последний деплой → **View Logs**
-3. Скрипт запросит **код подтверждения**
-4. Код придёт в Telegram на аккаунт рассылок
-5. **Проблема:** В Railway нельзя вводить код интерактивно
-
-**Решение:** Авторизуемся локально, потом загрузим session-файл.
-
----
-
-## ⚡ Упрощённый путь: Авторизация локально
-
-### Шаг 1: Установите Python на компьютер
-
-- **Windows:** https://www.python.org/downloads/ (галочка "Add to PATH")
-- **Mac:** `brew install python3` (если есть Homebrew) или с python.org
-
-### Шаг 2: Создайте папку и файлы
-
-1. Создайте папку `telegram-monitor` на рабочем столе
-2. Скопируйте туда файлы `monitor.py` и `requirements.txt` из GitHub
-3. Создайте файл `.env` со своими данными:
-```
-TELEGRAM_API_ID=ваш_api_id
-TELEGRAM_API_HASH=ваш_api_hash
-TELEGRAM_PHONE=+79123456789
-N8N_WEBHOOK_URL=http://test.com
